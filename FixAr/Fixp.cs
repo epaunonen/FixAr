@@ -1,15 +1,5 @@
-﻿/*ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,*
- ¤                                                                      ¤
- *  Copyright (C) 2018-2019 Eemeli Paunonen <paunonen.eemeli@gmail.com> *
- ¤                                                                      ¤
- *                       All rights reserved            ≧◔◡◔≦         *
- ¤                                                                      ¤
- *                   This file is part of 'FixAr'                       *
- ¤                                                                      ¤
- *   'FixAr' can not be copied and/or distributed without the express   *
- ¤                   permission of Eemeli Paunonen                      ¤
- *                                                                      *
- *¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤*/
+﻿// TODO: Documentation
+// TODO: Better storage format for LUTs + option to generate at runtime
 
 using System;
 
@@ -39,7 +29,7 @@ namespace FixAr { //FixedArithmetic
         private const bool USE_FAST_TOSTRING = false; //Converts to double
 
         internal const int SHIFT_AMOUNT = 12; //12 is 4096 --> "1" = 4096 raw value
-        internal const int FRACTIONAL_PRECISION = 1000; //eli millä tarkkuudella voidaan luoda fixp:eja
+        internal const int FRACTIONAL_PRECISION = 1000; //
 
         //  |=====================================================================|
         //  |~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~ ~|
@@ -58,7 +48,7 @@ namespace FixAr { //FixedArithmetic
         private const int FRACTION_RANGE = FRACTION_MASK - 1;
 
         //up to Shift Value 16
-        private static readonly long[] PI_TABLE = { //Accessed directly with SHIFT_AMOUNT, up to SHIFT_AMOUNT 16 (manually generated goodness :)
+        private static readonly long[] PI_TABLE = { //Accessed directly with SHIFT_AMOUNT, up to SHIFT_AMOUNT 16
 			3, 6, 12, 25, 50, 100, 201, 402, 804, 1608,
             3216, 6433, 12867, 25735, 51471, 102943, 205887
         };
@@ -119,8 +109,8 @@ namespace FixAr { //FixedArithmetic
         public static readonly Fixp Rad180 = Deg180.ToRadians();
         public static readonly Fixp Rad270 = Deg270.ToRadians();
         public static readonly Fixp Rad360 = Deg360.ToRadians();
-        public static readonly Fixp RadToDeg = new Fixp(ONE).ToDegrees(); //TODO: meneekö isommilla shift_amounteilla overflow:n puolelle
-        public static readonly Fixp DegToRad = new Fixp(ONE).ToRadians(); //nää on semi epätarkkoja...
+        public static readonly Fixp RadToDeg = new Fixp(ONE).ToDegrees(); //TODO: might overflow with large shift values
+        public static readonly Fixp DegToRad = new Fixp(ONE).ToRadians(); //TODO: incomplete implementation
 
         #region Constructors
 
@@ -136,7 +126,6 @@ namespace FixAr { //FixedArithmetic
             this.rawValue = rawValue;
         }
 
-        //TODO: muuta summary että kertoo 0, -222 casen
         /// <summary>
         /// Create a Fixp with defined integer and fractional (0 - <see cref="FRACTIONAL_PRECISION"/>) parts
         /// </summary>
@@ -172,9 +161,8 @@ namespace FixAr { //FixedArithmetic
 
         public double ToDouble() => rawValue / (double)ONE;
 
-        //This is very expensive shit, like VERY   EXPENSIVE   SHIT
         public override string ToString() {
-            if (USE_FAST_TOSTRING) { //normaali on nopeampi jos frac == 0
+            if (USE_FAST_TOSTRING) {
                 switch (FRACTIONAL_PRECISION) {
                     case 1:
                         return ((double)this).ToString("0");
@@ -204,7 +192,7 @@ namespace FixAr { //FixedArithmetic
                         return ((double)this).ToString("0.########");
                 }
             } else {
-                long integ = Math.Abs(rawValue) / ONE; //precise (ei signiä)
+                long integ = Math.Abs(rawValue) / ONE; 
                 long frac = Math.Abs((RawFractionalPart * FRACTIONAL_PRECISION) >> SHIFT_AMOUNT); //precise
 
                 string result = "";
@@ -234,7 +222,7 @@ namespace FixAr { //FixedArithmetic
             }
         }
 
-        public static explicit operator Fixp(int src) => new Fixp(src << SHIFT_AMOUNT); //atm käsittelee int:iä "kokonaislukuna" (eli !rawvaluena)
+        public static explicit operator Fixp(int src) => new Fixp(src << SHIFT_AMOUNT);
 
         public static explicit operator Fixp(long src) => new Fixp(src << SHIFT_AMOUNT);
 
@@ -670,11 +658,11 @@ namespace FixAr { //FixedArithmetic
 
         #region √
 
-        public static Fixp Sqrt(Fixp f) { //HUOM, tää ei heitä erroria jos f < 0, vaan 0.000
+        public static Fixp Sqrt(Fixp f) { //TODO: doesn't throw an exception if f < 0!
             var n = f.rawValue;
             uint c = 0x8000;
             uint g = 0x8000;
-
+            
             for (; ; ) {
                 if (g * g > n) {
                     g ^= c;
@@ -692,8 +680,8 @@ namespace FixAr { //FixedArithmetic
             return new Fixp(g << (SHIFT_AMOUNT >> 1));
         }
 
-        public static Fixp NRoot(Fixp f, uint root) { //tarvitsee hyvän initial guessin
-            Fixp x0 = (Fixp)2; //initial "guess" xd
+        public static Fixp NRoot(Fixp f, uint root) {
+            Fixp x0 = (Fixp)2; //initial "guess"
             Fixp x1 = Zero;
 
             //Fixp x1 = f >> (int)root;
@@ -708,26 +696,26 @@ namespace FixAr { //FixedArithmetic
 
         #region Rounding
 
-        public static Fixp Floor(Fixp value) { //Aina pienempään
+        public static Fixp Floor(Fixp value) {
             return new Fixp(value.rawValue & INTEGER_MASK);
         }
 
-        public static Fixp Ceiling(Fixp value) { //Aina suurempaan
+        public static Fixp Ceiling(Fixp value) {
             return new Fixp((value.rawValue + FRACTION_MASK) & INTEGER_MASK);
         }
 
-        public static Fixp Round(Fixp value) { //Roundaa alaspäin 0.5ssä
+        public static Fixp Round(Fixp value) { //Rounds down at midpoint
             return new Fixp((value.rawValue + (FRACTION_RANGE >> 1)) & ~FRACTION_MASK);
         }
 
-        public static Fixp Truncate(Fixp value) { //Aina nollaa kohti
+        public static Fixp Truncate(Fixp value) { //always towards zero
             if (value < 0)
                 return new Fixp((value.rawValue + FRACTION_RANGE) & INTEGER_MASK);
             else
                 return new Fixp(value.rawValue & INTEGER_MASK);
         }
 
-        //Truncaten vastakohta? ja normaali roundaus
+        //TODO: "Normal rounding"
 
         #endregion Rounding
 
@@ -776,7 +764,7 @@ namespace FixAr { //FixedArithmetic
             return Exp(exp * Log(value));
         }
 
-        //ei oikeesti oo fast vaan safe... eli jos overflowaa niin clamppaa maxiin
+        //clamps to max on overflow
         public static Fixp SafePow(Fixp value, int exp) {
             //------ return values for special cases ----------
             if (value == Zero || value == One || exp == 1) return value;
@@ -899,9 +887,9 @@ namespace FixAr { //FixedArithmetic
         #region Trig
 
         public static Fixp Sin(Fixp radians) {
-            Fixp rad = (radians % Rad360); //raw value of actual degrees, huom aina vähemmän kuin 360, ELI jos esim 371.123 niin deg = 11.123 raakana
+            Fixp rad = (radians % Rad360); //raw value of actual degrees
 
-            bool isNegative = rad < 0; //jos neg niin asetetaan trueksi tässä ja tossa alla neg = !neg
+            bool isNegative = rad < 0; 
             rad = Abs(rad);
 
             if (rad > Rad270) { //271 - 360
@@ -1021,7 +1009,7 @@ namespace FixAr { //FixedArithmetic
             GenerateTAN_LUT();
         }
 
-        //näihin täytyy tehdä downscalaus
+        
         internal static void GenerateSIN_LUT() {
             using (var writer = new System.IO.StreamWriter("FixAr_SIN_LUT.cs", false)) {
                 WriteHeader(writer);
@@ -1031,7 +1019,7 @@ namespace FixAr { //FixedArithmetic
 		internal static readonly long[] SIN_LUT = new long[] {");
 
                 int lineCounter = 0;
-                const int n = (int)(1.5708 * ONE) + 1; //eli 1608 (1609(
+                const int n = (int)(1.5708 * ONE) + 1; 
                 const double d = 1.5708 / n;
 
                 for (int i = 0; i < n - 1; i++) {
@@ -1051,7 +1039,6 @@ namespace FixAr { //FixedArithmetic
         };
     }
 }");
-                WriteBird(writer);
             }
 
             const string fileName = "FixAr_SIN_LUT.cs";
@@ -1071,7 +1058,7 @@ namespace FixAr { //FixedArithmetic
 		internal static readonly long?[] TAN_LUT = new long?[] {");
 
                 int lineCounter = 0;
-                const int n = (int)(1.5708 * ONE) + 1; //eli 1608(9)
+                const int n = (int)(1.5708 * ONE) + 1; 
                 const double d = 1.5708 / n;
 
                 for (int i = 0; i < n - 1; i++) {
@@ -1091,7 +1078,7 @@ namespace FixAr { //FixedArithmetic
         };
     }
 }");
-                WriteBird(writer);
+                
             }
 
             const string fileName = "FixAr_TAN_LUT.cs";
@@ -1100,50 +1087,6 @@ namespace FixAr { //FixedArithmetic
             string fullPath = System.IO.Path.Combine(System.IO.Directory.GetCurrentDirectory(), fileName);
             Console.WriteLine("\nTan LUT has been created at '" + fullPath + "'");
             Console.WriteLine("Use it to replace the current LUT file!\n");
-        }
-
-        private static void WriteHeader(System.IO.StreamWriter writer) {
-            writer.Write(
-@"
-/*ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,*
- ¤                                                                      ¤
- *  Copyright (C) 2018-2019 Eemeli Paunonen <paunonen.eemeli@gmail.com> *
- ¤                                                                      ¤
- *                       All rights reserved            ≧◔◡◔≦         *
- ¤                                                                      ¤
- *                   This file is part of 'FixAr'                       *
- ¤                                                                      ¤
- *   'FixAr' can not be copied and/or distributed without the express   *
- ¤                   permission of Eemeli Paunonen                      ¤
- *                                                                      *
- *¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤*/
-
-");
-        }
-
-        private static void WriteBird(System.IO.StreamWriter writer) {
-            writer.Write(
-@"
-
-/*
-
- 				  .
- 			     /:\
- 			    /;:.\
- 	       _--'/;:.. \'--_
- 	     -_   '--___--'   _-
- 		   '''--_____--'''
-		   __.|    9 )_\
-	  _.-''          /
-	<`'     ..._    <'
-	 `._ .-'    `.  |
-	  ; `.    .-'  /
-	   \  `~~'  _.'
-	    `'...''% _
-		  \__ |`.
-		  /`.
-
-*/");
         }
 
 #endif
@@ -1155,23 +1098,3 @@ namespace FixAr { //FixedArithmetic
 
 #pragma warning restore CS0162, CS0618
 }
-
-/*
-
- 				  .
- 			     /:\
- 			    /;:.\
- 	       _--'/;:.. \'--_
- 	     -_   '--___--'   _-
- 		   '''--_____--'''
-		   __.|    9 )_\
-	  _.-''          /
-	<`'     ..._    <'
-	 `._ .-'    `.  |
-	  ; `.    .-'  /
-	   \  `~~'  _.'
-	    `'...''% _
-		  \__ |`.
-		  /`.
-
-*/

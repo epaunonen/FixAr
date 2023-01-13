@@ -273,7 +273,7 @@ namespace FixAr.Extensions {
             return Fixv2.SqDistance(point, ClosestPtPointLine(point, p1, p2));
         }
 
-        ////#1 EI TOIMI THO
+        ////TODO: Fix
         //public static Fixp SqDistPointSegment(Fixv2 point, Fixv2 p1, Fixv2 p2) {
         //    Fixv2 ab = p2 - p1, ac = point - p1, bc = point - p2;
         //    Fixp e = Fixv2.Dot(ac, ab);

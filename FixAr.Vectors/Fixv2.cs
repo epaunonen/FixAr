@@ -1,16 +1,4 @@
-﻿/*ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,*
- ¤                                                                      ¤
- *  Copyright (C) 2018-2019 Eemeli Paunonen <paunonen.eemeli@gmail.com> *
- ¤                                                                      ¤
- *                       All rights reserved            ≧◔◡◔≦﻿         * 
- ¤                                                                      ¤
- *                   This file is part of 'FixAr'                       *
- ¤                                                                      ¤ 
- *   'FixAr' can not be copied and/or distributed without the express   *
- ¤                   permission of Eemeli Paunonen                      ¤
- *                                                                      *
- *¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤*/
-
+﻿// TODO: docs
 
 using System;
 using System.Collections.Generic;
@@ -141,7 +129,7 @@ namespace FixAr.Vectors {
             return (v1.x * v2.x) + (v1.y * v2.y);
         }
 
-		public static Fixp Cross(Fixv2 v1, Fixv2 v2) { //wtf tää on, ilmeisesti se on just näin
+		public static Fixp Cross(Fixv2 v1, Fixv2 v2) { 
 			return (v1.x * v2.y) - (v1.y * v2.x);
 		}
 
@@ -210,23 +198,3 @@ namespace FixAr.Vectors {
 
 }
 
-/*	
-
- 				  .
- 			     /:\
- 			    /;:.\    
- 	       _--'/;:.. \'--_
- 	     -_   '--___--'   _-
- 		   '''--_____--'''
-		   __.|    9 )_\  
-	  _.-''          /	 
-	<`'     ..._    <'
-	 `._ .-'    `.  |
-	  ; `.    .-'  /
-	   \  `~~'  _.'
-	    `'...''% _
-		  \__ |`.   
-		  /`.
-
-
-*/

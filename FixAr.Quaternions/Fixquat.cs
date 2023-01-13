@@ -1,18 +1,4 @@
-﻿/*ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,*
- ¤                                                                      ¤
- *  Copyright (C) 2018-2019 Eemeli Paunonen <paunonen.eemeli@gmail.com> *
- ¤                                                                      ¤
- *                       All rights reserved            ≧◔◡◔≦﻿         * 
- ¤                                                                      ¤
- *                   This file is part of 'FixAr'                       *
- ¤                                                                      ¤ 
- *   'FixAr' can not be copied and/or distributed without the express   *
- ¤                   permission of Eemeli Paunonen                      ¤
- *                                                                      *
- *¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤*/
-
-
-
+﻿
 using System;
 using System.ComponentModel;
 using FixAr.Vectors;
@@ -33,7 +19,7 @@ namespace FixAr.Quaternions {
         //  |=~=~=~=~=~=~ S E T T I N G S ~=~=~=~=~=~=|
 
         public enum EulerOrder { XYZ, XZY, YXZ, YZX, ZXY, ZYX }
-        public const EulerOrder EULER_ORDER = EulerOrder.YXZ; //Unity käyttää YXZ:a (oikeesti ZXY mutta 'toiskätisesti')
+        public const EulerOrder EULER_ORDER = EulerOrder.YXZ; //Unity uses YXZ
 
         //  |=~=~=~=~=~=~=~=~=~  *  ~=~=~=~=~=~=~=~=~=|
         #endregion
@@ -336,7 +322,7 @@ namespace FixAr.Quaternions {
             Fixp blendB;
 
             if (cosHalfAngle < (Fixp.One - (Fixp.One / 100))) {
-                Fixp halfAngle = Fixp.Acos(cosHalfAngle); //hömm onko tässä radit niinq pitäis
+                Fixp halfAngle = Fixp.Acos(cosHalfAngle); //TODO: check that this has radians as supposed
                 Fixp sinHalfAngle = Fixp.Sin(halfAngle);
                 Fixp oneOverSinHalfAngle = Fixp.One / sinHalfAngle;
                 blendA = Fixp.One - t;
@@ -573,23 +559,3 @@ namespace FixAr.Quaternions {
 
 }
 
-/*	
-
- 				  .
- 			     /:\
- 			    /;:.\    
- 	       _--'/;:.. \'--_
- 	     -_   '--___--'   _-
- 		   '''--_____--'''
-		   __.|    9 )_\  
-	  _.-''          /	 
-	<`'     ..._    <'
-	 `._ .-'    `.  |
-	  ; `.    .-'  /
-	   \  `~~'  _.'
-	    `'...''% _
-		  \__ |`.   
-		  /`.
-
-
-*/

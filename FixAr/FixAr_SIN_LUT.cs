@@ -1,18 +1,4 @@
 
-/*ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,*
- ¤                                                                      ¤
- *  Copyright (C) 2018-2019 Eemeli Paunonen <paunonen.eemeli@gmail.com> *
- ¤                                                                      ¤
- *                       All rights reserved            ≧◔◡◔≦﻿         * 
- ¤                                                                      ¤
- *                   This file is part of 'FixAr'                       *
- ¤                                                                      ¤ 
- *   'FixAr' can not be copied and/or distributed without the express   *
- ¤                   permission of Eemeli Paunonen                      ¤
- *                                                                      *
- *¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤°º¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤ø,¸¸,ø¤º°`°º¤ø,¸,ø¤º°¤*/
-
-
 namespace FixAr {
 
 	public partial struct Fixp {
@@ -826,24 +812,3 @@ namespace FixAr {
         };
     }
 }
-
-/*	
-
- 				  .
- 			     /:\
- 			    /;:.\    
- 	       _--'/;:.. \'--_
- 	     -_   '--___--'   _-
- 		   '''--_____--'''
-		   __.|    9 )_\
-	  _.-''          /
-	<`'     ..._    <'
-	 `._ .-'    `.  |
-	  ; `.    .-'  /
-	   \  `~~'  _.'
-	    `'...''% _
-		  \__ |`.   
-		  /`.
-
-
-*/

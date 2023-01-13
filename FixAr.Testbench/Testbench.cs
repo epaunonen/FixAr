@@ -16,17 +16,6 @@ namespace FixAr.Testbench {
         static void Main(string[] args) {
 
 
-            //KULMAN SAAMINEN YKSIKKÖYMPYRÄSSÄ 360 ZOMG
-            //ei tarvii normalisoida, palauttaa aina sen kulman, suoraan ylös on 90 astetta, alas -90, oikee 0, vasen 180... (vissiin LUT ominaisuus...)
-            //eli ylhäältä menee 0->180 ja alhaalt 0->-180 !
-            //Fixp f1 = new Fixp(-2, 0); //x
-            //Fixp f2 = new Fixp(0, 0); //y
-            //Console.WriteLine(Atan2(f2, f1)); //(huom vaihda x ja y niin saat oikeat arvot)
-
-            //Fixv2 f1 = new Fixv2(1, 0);
-            //Fixv2 f2 = new Fixv2(0, -1);
-            //Console.WriteLine(Fixv2.Angle(f1, f2)); //angle palauttaa aina kulman duh ja siis sen pienemmän
-
 
             //-----------------------
             if (run) Run();
